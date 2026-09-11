@@ -31,7 +31,7 @@ jobs:
           terraform init -backend=false
           terraform validate
 
-    docker:
+  docker:
     name: Docker Build
     runs-on: ubuntu-latest
 
