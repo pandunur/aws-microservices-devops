@@ -1,0 +1,7 @@
+aws_region     = "ap-southeast-3"
+project_name   = "ecs-microservices"
+environment    = "dev"
+vpc_cidr       = "10.0.0.0/16"
+alb_port       = 80
+container_port = 8080
+ecs_desired_count = 1
