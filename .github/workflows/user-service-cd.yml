@@ -1,0 +1,55 @@
+name: User Service CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "services/user-service/**"
+      - "ecs/task-definitions/user-service.json"
+      - ".github/workflows/user-service-cd.yml"
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ap-southeast-3
+  ECR_REPOSITORY: user-service
+  ECS_CLUSTER: YOUR_CLUSTER_NAME
+  ECS_SERVICE: YOUR_SERVICE_NAME
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build image
+        run: |
+          docker build \
+            -t $ECR_REPOSITORY:${GITHUB_SHA} \
+            ./services/user-service
+
+      - name: Tag image
+        run: |
+          docker tag \
+            $ECR_REPOSITORY:${GITHUB_SHA} \
+            ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:${GITHUB_SHA}
+
+      - name: Push image
+        run: |
+          docker push \
+            ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:${GITHUB_SHA}
