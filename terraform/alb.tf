@@ -20,7 +20,7 @@ resource "aws_lb" "main" {
 resource "aws_lb_target_group" "service" {
   for_each = local.services
 
-  name        = "${var.project_name}-${each.key}-tg"
+  name        = "${substr(var.project_name, 0, 16)}-${each.key}-tg"
   port        = each.value.container_port
   protocol    = "HTTP"
   target_type = "ip"

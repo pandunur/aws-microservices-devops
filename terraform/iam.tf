@@ -97,6 +97,7 @@ resource "aws_iam_role_policy" "github_actions_ecr" {
 
         Resource = "*"
       },
+
       {
         Effect = "Allow"
 
@@ -109,10 +110,36 @@ resource "aws_iam_role_policy" "github_actions_ecr" {
         ]
 
         Resource = [
-          "arn:aws:ecr:ap-southeast-3:${data.aws_caller_identity.current.account_id}:repository/user-service",
-          "arn:aws:ecr:ap-southeast-3:${data.aws_caller_identity.current.account_id}:repository/payment-service",
-          "arn:aws:ecr:ap-southeast-3:${data.aws_caller_identity.current.account_id}:repository/notification-service"
+          "arn:aws:ecr:${var.aws_region}:${data.aws_caller_identity.current.account_id}:repository/user-service",
+          "arn:aws:ecr:${var.aws_region}:${data.aws_caller_identity.current.account_id}:repository/payment-service",
+          "arn:aws:ecr:${var.aws_region}:${data.aws_caller_identity.current.account_id}:repository/notification-service"
         ]
+      },
+
+      # ECS deployment
+      {
+        Effect = "Allow"
+
+        Action = [
+          "ecs:RegisterTaskDefinition",
+          "ecs:DescribeTaskDefinition",
+          "ecs:CreateService",
+          "ecs:DescribeServices",
+          "ecs:UpdateService"
+        ]
+
+        Resource = "*"
+      },
+
+      # Allow GitHub Actions to pass the ECS execution role to ECS
+      {
+        Effect = "Allow"
+
+        Action = [
+          "iam:PassRole"
+        ]
+
+        Resource = aws_iam_role.ecs_task_execution.arn
       }
     ]
   })

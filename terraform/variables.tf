@@ -34,9 +34,3 @@ variable "container_port" {
   type        = number
   default     = 8080
 }
-
-variable "ecs_desired_count" {
-  description = "Number of ECS tasks to run for each service"
-  type        = number
-  default     = 1
-}

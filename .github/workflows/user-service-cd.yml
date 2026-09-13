@@ -16,8 +16,8 @@ permissions:
 env:
   AWS_REGION: ap-southeast-3
   ECR_REPOSITORY: user-service
-  ECS_CLUSTER: YOUR_CLUSTER_NAME
-  ECS_SERVICE: YOUR_SERVICE_NAME
+  ECS_CLUSTER: ecs-microservices-cluster
+  ECS_SERVICE: user-service
 
 jobs:
   deploy:
