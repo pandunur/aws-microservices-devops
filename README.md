@@ -4,7 +4,7 @@ A hands-on, production-inspired microservices architecture built on AWS using Do
 
 ## Architecture
 
-![AWS Microservices Architecture](diagrams/aws-microservices-architecture.png)
+![AWS Microservices Architecture](docs/architecture-diagram.png)
 
 ## Architecture Overview
 
